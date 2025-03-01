@@ -66,7 +66,7 @@ public class BachelorProgramme {
         return true;
     }
 
-    public boolean activityExists(String activityName) {
+    private boolean activityExists(String activityName) {
         for (Course c : basicCourses) {
             if (c.name.equals(activityName)) {
                 return true;

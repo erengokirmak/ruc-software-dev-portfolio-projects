@@ -22,7 +22,7 @@ public class SubjectModule {
         }
     }
 
-    public boolean activityExists(String activityName) {
+    private boolean activityExists(String activityName) {
         for (Course course : courses) {
             if (course.name.equals(activityName)) {
                 return true;
