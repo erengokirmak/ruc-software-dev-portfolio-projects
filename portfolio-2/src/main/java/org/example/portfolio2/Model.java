@@ -1,96 +1,57 @@
 package org.example.portfolio2;
-import java.util.*;
 
-class Model {
-  public List<String> baseProgram() {
-    return Arrays.asList("NatBach","HumTek");
-  }
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 
-  List<String> subjectModule() {
-    return Arrays.asList("Computer Science","Informatik","Astrology");
-  }
+import java.util.ArrayList;
+import java.util.List;
 
-  List<String> baseCourse(String base) {
-    return switch (base) {
-      case "NatBach" -> Arrays.asList(
-              "BK1 Empirical Data",
-              "BK2 Experimental Methods",
-              "BK3 Theory of Natural Science",
-              "Logic and Discrete Mathematics",
-              "Functional Biology – Zoology",
-              "Linear Algebra",
-              "Organic Chemistry",
-              "Biological Chemistry",
-              "Statistical Models",
-              "Functional Programming and Language Implementations",
-              "Classical Mechanics",
-              "Environmental Science",
-              "Cell Biology",
-              "Functional biology – Botany",
-              "Supplementary Physics",
-              "Calculus",
-              "The Chemical Reaction",
-              "Scientific Computing",
-              "Energy and Climate Changes"
-      );
-      case "HumTek" -> Arrays.asList(
-              "Design og Konstruktion I+Workshop" ,
-              "Subjektivitet, Teknologi og Samfund I" ,
-              "Teknologiske systemer og artefakter I" ,
-              "Videnskabsteori" ,
-              "Design og Konstruktion II+Workshop" ,
-              "Subjektivitet, Teknologi og Samfund II" ,
-              "Bæredygtige teknologier" ,
-              "Kunstig intelligens" ,
-              "Medier og teknologi - datavisualisering" ,
-              "Teknologiske Systemer og Artefakter II - Sundhedsteknologi" ,
-              "Den (in)humane storby" ,
-              "Interactive Design in the Field" ,
-              "Organisation og ledelse af designprocesser"
-      );
-      default -> null;
-    };
-  }
+public class Model {
+    /**
+     * Used for the database insertions.
+     * In a more developed application,
+     * this would be modifiable.
+     */
+    static String student = "Eren";
+    String programme = null;
+    DBConnection dbConnection = new DBConnection();
+    List<String> basicProgrammes;
+    List<String> subjectModules;
+    ObservableList<String> basicActivities = FXCollections.observableArrayList();
+    ObservableList<String> subjectModule1Activities = FXCollections.observableArrayList();
+    ObservableList<String> subjectModule2Activities = FXCollections.observableArrayList();
 
-  List<String> baseProject(String base) {
-    return Arrays.asList("BP1 " + base, "BP2 " + base, "BP3 " + base, "Bachelorproject " + base);
-  }
+    ObservableList<String> selectedBasicActivities = FXCollections.observableArrayList();
+    ObservableList<String> selectedSubjectModule1Activities = FXCollections.observableArrayList();
+    ObservableList<String> selectedSubjectModule2Activities = FXCollections.observableArrayList();
 
-  List<String> subjectCourse(String base) {
-    return switch (base) {
-      case "Computer Science" -> Arrays.asList("Essential Computing",
-              "Software Development", "Interactive Digital Systems");
-      case "Informatik" -> Arrays.asList("Organisatorisk forandring og IT",
-              "BANDIT", "Web baserede IT-Systemer");
-      case "Astrology" -> Arrays.asList("Essential Astrology",
-              "Venus studies", "Mars studies", "Ascendant calculations");
-      default -> null;
-    };
-  }
-  String subjectProject(String subject) {
-    return "Subject module project in "+subject;
-  }
-  int courseWeight(String course){
-    if (isProject(course)) {
-      return 15;
+    String selectedSubjectModule1 = null;
+    String selectedSubjectModule2 = null;
+
+    Model() {
+        basicProgrammes = dbConnection.getProgrammes();
+        subjectModules = dbConnection.getSubjectModules();
+        selectedBasicActivities = FXCollections.observableArrayList(dbConnection.getStudentBasicActivities(Model.student));
     }
-    return switch (course) {
-      case "Software Development" -> 10;
-      case "BANDIT" -> 10;
-      default -> 5;
-    };
-  }
-  boolean isProject(String s){
-    for(String fm: subjectModule()){
-      if (s.equals(subjectProject(fm))) {
-        return true;
-      }
+
+    public List<String> getBasicActivities(String programme) {
+        return dbConnection.getBasicActivities(programme);
     }
-    for(String bs: baseProgram()) {
-      if (baseProject(bs).contains(s)) {
-        return true;
-      }
+
+    public List<String> getSubjectModuleActivities(String subjectModule) {
+        return dbConnection.getSubjectModuleActivities(subjectModule);
     }
-    return false;
-  }
+
+    public void registerStudentToActivity(String student, String activity) {
+        dbConnection.registerStudentToActivity(student, activity);
+    }
+
+    public void clearStudentActivities() {
+        dbConnection.clearStudentActivities(Model.student);
+    }
+
+    public void clearStudentBasicActivities() {
+        dbConnection.command("delete student_activity from student_activity inner join activity a on student_activity.course = a.name inner join programme_activity p on p.name = '" + programme + "' where student_id = '" + student + "'");
+    }
 }

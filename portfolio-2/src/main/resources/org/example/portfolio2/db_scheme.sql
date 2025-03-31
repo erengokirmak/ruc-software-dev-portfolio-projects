@@ -1,11 +1,12 @@
+drop table if exists programme_activity;
+drop table if exists student_activity;
+drop table if exists submodule_activity;
 drop table if exists student;
-drop table if exists course;
+drop table if exists activity;
 drop table if exists subject_module;
 drop table if exists programme;
-drop table if exists submodule_course;
-drop table if exists student_course;
-drop table if exists programme_course;
 
+/* Contains the programmes */
 create table programme
 (
     name text primary key
@@ -13,43 +14,42 @@ create table programme
 
 create table student
 (
-    id        integer primary key,
-    name      text,
+    name      text primary key,
     programme text references programme (name)
 );
 
-create table course
+create table activity
 (
     name text primary key unique,
-    ects integer
+    ects integer,
+    is_project boolean
 );
 
-create table programme_course
+create table programme_activity
 (
-    programme_name text references programme (name),
-    course_name    text references course (name),
-    primary key (programme_name, course_name)
+    programme text references programme (name),
+    activity text references activity (name),
+    primary key (programme, activity)
 );
 
 create table subject_module
 (
-    name text primary key unique
+    name text primary key
 );
 
-create table submodule_course
+create table submodule_activity
 (
     subject_module text references subject_module (name),
-    course        text references course (name),
-    primary key (subject_module, course)
+    activity         text references activity (name),
+    primary key (subject_module, activity)
 );
 
-create table student_course
+create table student_activity
 (
-    student_id  integer references student (id),
-    course      text references course (name),
-    course_type text, /* signifies which type of relationship the student has with the class */
-    primary key (student_id, course)
+    student  integer references student (name),
+    activity text references activity (name),
+    primary key (student, activity)
 );
 
 select *
-from student;
+from programme_activity;

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/src/main/resources/org/example/portfolio2/db_data.sql" dialect="SQLite" />
     <file url="file://$PROJECT_DIR$/src/main/resources/org/example/portfolio2/db_scheme.sql" dialect="SQLite" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/org/example/portfolio2/db_sum_basic_course_ects.sql" dialect="SQLite" />
     <file url="PROJECT" dialect="SQLite" />
   </component>
 </project>
